@@ -1,5 +1,7 @@
 # Tool to fit discrete distributions to a set of data
-
+# This version fits the discrete uniform, beta binomal and Zipfian distributions
+# Usage:
+#    >>> fit_discrete.py test_data.txt
 
 import numpy as np
 from scipy import stats
@@ -54,10 +56,10 @@ def fit_distribution(sample_data: np.array, distribution: stats.rv_discrete, bou
 def guess_bounds(sample_data: np.array):
     low = min(sample_data)
     high = max(sample_data)
-    rough_bounds = {'uniform': {'low': low, 'high': high+1, 'loc': (low-1, high)},
-              'betabinom': {'n': high-low, 'a': (0, high*10), 'b': (0, high*10), 'loc': (low-1, high)},
-              'zipf': {'a': (-1, high*10), 'loc': (low-1, high)}
-              }
+    rough_bounds = {'discrete uniform': {'low': low, 'high': high+1, 'loc': (low-1, high)},
+                    'beta binomial': {'n': high-low, 'a': (0, high*10), 'b': (0, high*10), 'loc': (low-1, high)},
+                    'zipfian': {'a': (-1, high*10), 'loc': (low-1, high)}
+                    }
     return rough_bounds
 
 
@@ -70,11 +72,14 @@ def set_plot(rows: int = 2, cols: int = 2):
 
 if __name__ == '__main__':
     data = read_file('test_data.txt')
+
     axs = set_plot()
 
     show_data(data, ax=axs[0], title='Input data')
 
-    distributions = {'uniform': stats.randint, 'betabinom': stats.betabinom, 'zipf': stats.zipf}
+    distributions = {'discrete uniform': stats.randint,
+                     'beta binomial': stats.betabinom,
+                     'zipfian': stats.zipf}
     bounds = guess_bounds(data)
 
     for i, (key, dist) in enumerate(distributions.items()):
