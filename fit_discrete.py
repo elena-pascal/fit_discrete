@@ -70,6 +70,11 @@ def set_plot(rows: int = 2, cols: int = 2):
     return axes.ravel()
 
 
+distributions = {'discrete uniform': stats.randint,
+                 'beta binomial': stats.betabinom,
+                 'zipfian': stats.zipf}
+
+
 if __name__ == '__main__':
     data = read_file('test_data.txt')
 
@@ -77,9 +82,6 @@ if __name__ == '__main__':
 
     show_data(data, ax=axs[0], title='Input data')
 
-    distributions = {'discrete uniform': stats.randint,
-                     'beta binomial': stats.betabinom,
-                     'zipfian': stats.zipf}
     bounds = guess_bounds(data)
 
     for i, (key, dist) in enumerate(distributions.items()):
